@@ -1,0 +1,8 @@
+{
+  "name": "포근한 친구들 - 캐릭터 홍보 사이트",
+  "description": "여운, 고등어, 커스타드의 매력을 소개하는 따뜻하고 포근한 분위기의 캐릭터 홍보 웹사이트입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
