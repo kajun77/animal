@@ -34,6 +34,7 @@ interface Character {
   color: string;
   bgClass: string;
   likes: string[];
+  sheetUrl: string;
 }
 
 const CHARACTERS: Character[] = [
@@ -48,7 +49,8 @@ const CHARACTERS: Character[] = [
     tags: ["#따뜻함", "#공감", "#차분한곁"],
     color: "#E8AF6E",
     bgClass: "bg-yeoun-bg",
-    likes: ["따뜻한 차", "노을", "책", "친구의 고민 듣기"]
+    likes: ["따뜻한 차", "노을", "책", "친구의 고민 듣기"],
+    sheetUrl: "https://raw.githubusercontent.com/kajun77/animal/e69cdfb9dfee364a6e26a951cd2145762932e3c1/%EC%97%AC%EC%9A%B4_%EC%BA%90%EB%A6%AD%ED%84%B0%EC%8B%9C%ED%8A%B8.png"
   },
   {
     id: "godeungeo",
@@ -61,7 +63,8 @@ const CHARACTERS: Character[] = [
     tags: ["#호기심", "#장난꾸러기", "#식탐고양이"],
     color: "#8AA6C1",
     bgClass: "bg-godeungeo-bg",
-    likes: ["참치캔", "햇살", "박스", "간식 시간"]
+    likes: ["참치캔", "햇살", "박스", "간식 시간"],
+    sheetUrl: "https://raw.githubusercontent.com/kajun77/animal/e69cdfb9dfee364a6e26a951cd2145762932e3c1/%EA%B3%A0%EB%93%B1%EC%96%B4_%EC%BA%90%EB%A6%AD%ED%84%B0%EC%8B%9C%ED%8A%B8.png"
   },
   {
     id: "custard",
@@ -74,7 +77,8 @@ const CHARACTERS: Character[] = [
     tags: ["#상냥함", "#다정함", "#도움의손길"],
     color: "#F2D06B",
     bgClass: "bg-custard-bg",
-    likes: ["커스타드 푸딩", "햇살", "산책", "친구들과의 시간"]
+    likes: ["커스타드 푸딩", "햇살", "산책", "친구들과의 시간"],
+    sheetUrl: "https://raw.githubusercontent.com/kajun77/animal/e69cdfb9dfee364a6e26a951cd2145762932e3c1/%EC%BB%A4%EC%8A%A4%ED%83%80%EB%93%9C_%EC%BA%90%EB%A6%AD%ED%84%B0%EC%8B%9C%ED%8A%B8.png"
   }
 ];
 
@@ -153,12 +157,23 @@ const CharacterCard = ({ character, onOpen }: { character: Character; onOpen: (c
 
 export default function App() {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [selectedSticker, setSelectedSticker] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const aboutRef = useRef<HTMLElement>(null);
+  const charactersRef = useRef<HTMLElement>(null);
+  const galleryRef = useRef<HTMLElement>(null);
 
   const scrollToAbout = () => {
     aboutRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToCharacters = () => {
+    charactersRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToGallery = () => {
+    galleryRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleSubscribe = (e: FormEvent) => {
@@ -187,7 +202,7 @@ export default function App() {
             />
             <motion.div 
               layoutId={`card-container-${selectedCharacter.id}`}
-              className={`relative w-full max-w-2xl bg-white rounded-[3rem] overflow-hidden soft-shadow z-10 flex flex-col md:flex-row`}
+              className={`relative w-full max-w-5xl bg-white rounded-[3rem] overflow-hidden soft-shadow z-10 flex flex-col md:flex-row`}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -199,7 +214,7 @@ export default function App() {
                 <ChevronRight className="w-6 h-6 rotate-180" />
               </button>
 
-              <div className={`w-full md:w-1/2 p-12 flex flex-col items-center justify-center ${selectedCharacter.bgClass} relative`}>
+              <div className={`w-full md:w-[35%] p-12 flex flex-col items-center justify-center ${selectedCharacter.bgClass} relative`}>
                 <div className="w-48 h-48 rounded-full bg-white shadow-2xl border-8 border-white flex items-center justify-center mb-6 overflow-hidden">
                   {selectedCharacter.id === "godeungeo" ? (
                     <Cat className="w-24 h-24" style={{ color: selectedCharacter.color }} />
@@ -211,8 +226,8 @@ export default function App() {
                 <p className="text-brand-brown/40 font-cute text-xl uppercase tracking-widest mt-1">{selectedCharacter.species}</p>
               </div>
 
-              <div className="w-full md:w-1/2 p-10 md:p-12 overflow-y-auto max-h-[60vh] md:max-h-[80vh]">
-                <div className="space-y-8">
+              <div className="w-full md:w-[65%] p-10 md:p-14 overflow-y-auto max-h-[80vh] md:max-h-[90vh]">
+                <div className="space-y-10">
                   <div>
                     <h4 className="text-[10px] uppercase tracking-widest font-bold text-brand-brown/30 mb-2">오늘의 한마디</h4>
                     <p className="font-hand text-3xl text-brand-orange leading-tight italic">
@@ -240,10 +255,21 @@ export default function App() {
                         ))}
                       </div>
                     </div>
+
+                    <div className="pt-6 border-t border-brand-brown/5">
+                      <h4 className="text-[10px] uppercase tracking-widest font-bold text-brand-brown/30 mb-4 italic">Character Design Sheet</h4>
+                      <div className="rounded-2xl overflow-hidden shadow-lg border border-brand-brown/5 bg-white group">
+                        <img 
+                          src={selectedCharacter.sheetUrl} 
+                          alt={`${selectedCharacter.name} 캐릭터 시트`}
+                          className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    </div>
                     
-                    <div className="pt-4 border-t border-brand-brown/5">
-                      <p className="text-[10px] text-brand-brown/40 font-medium">
-                        나이: {selectedCharacter.age}
+                    <div className="pt-4 text-center">
+                      <p className="text-[10px] text-brand-brown/40 font-medium tracking-widest uppercase">
+                        나이: {selectedCharacter.age} • STATUS: PURE HAPPINESS
                       </p>
                     </div>
                   </div>
@@ -253,6 +279,54 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+      {/* Sticker Detail Modal */}
+      <AnimatePresence>
+        {selectedSticker !== null && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedSticker(null)}
+              className="absolute inset-0 bg-brand-brown/60 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-lg bg-white rounded-[2.5rem] overflow-hidden soft-shadow z-10 p-8 text-center"
+            >
+              <button 
+                onClick={() => setSelectedSticker(null)}
+                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition-colors"
+              >
+                <ChevronRight className="w-6 h-6 rotate-180" />
+              </button>
+
+              <div className={`aspect-square w-full rounded-3xl flex items-center justify-center text-8xl mb-6 shadow-inner ${
+                selectedSticker % 3 === 0 ? 'bg-yeoun-bg' : selectedSticker % 3 === 1 ? 'bg-godeungeo-bg' : 'bg-custard-bg'
+              }`}>
+                {selectedSticker % 4 === 0 ? "📖" : selectedSticker % 4 === 1 ? "🥪" : selectedSticker % 4 === 2 ? "💤" : "✨"}
+              </div>
+              
+              <h3 className="text-3xl font-bold mb-2">특별한 순간 #{selectedSticker + 1}</h3>
+              <p className="text-brand-brown/50 font-cute text-xl mb-6">
+                {selectedSticker % 3 === 0 ? "여운이의 책 읽는 오후" : selectedSticker % 3 === 1 ? "고등어의 맛있는 간식 시간" : "커스타드의 포근한 낮잠"}
+              </p>
+              
+              <div className="flex gap-4">
+                <button className="flex-1 py-4 rounded-full bg-brand-brown text-white font-bold hover:scale-105 active:scale-95 transition-all">
+                  이미지 저장하기
+                </button>
+                <button className="flex-1 py-4 rounded-full bg-brand-beige text-brand-brown font-bold hover:scale-105 active:scale-95 transition-all">
+                  공유하기
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center frosted-glass">
         <div className="flex items-center gap-2">
@@ -263,8 +337,8 @@ export default function App() {
         </div>
         <div className="hidden md:flex gap-8 font-medium text-sm">
           <button onClick={scrollToAbout} className="hover:text-brand-orange transition-colors">세계관</button>
-          <a href="#characters" className="hover:text-brand-orange transition-colors">친구들 소개</a>
-          <a href="#gallery" className="hover:text-brand-orange transition-colors">갤러리</a>
+          <button onClick={scrollToCharacters} className="hover:text-brand-orange transition-colors">친구들 소개</button>
+          <button onClick={scrollToGallery} className="hover:text-brand-orange transition-colors">갤러리</button>
         </div>
         <button className="px-5 py-2 rounded-full bg-brand-brown text-white text-sm font-bold shadow-xl hover:scale-105 active:scale-95 transition-all">
           굿즈 보러가기
@@ -347,7 +421,10 @@ export default function App() {
               viewport={{ once: true }}
               className="relative aspect-square rounded-[3rem] bg-brand-green/20 overflow-hidden flex items-center justify-center group"
             >
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700" />
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-105 transition-transform duration-700"
+                style={{ backgroundImage: `url('https://raw.githubusercontent.com/kajun77/animal/e69cdfb9dfee364a6e26a951cd2145762932e3c1/%EC%88%B2%EC%86%8D%EC%B9%9C%EA%B5%AC%EB%93%A4_%EC%B9%B4%ED%88%B0.png')` }}
+              />
               <div className="relative z-10 text-center p-12 frosted-glass rounded-3xl m-8">
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
                   <MapPin className="w-8 h-8 text-brand-green" />
@@ -395,7 +472,7 @@ export default function App() {
       </section>
 
       {/* Characters Section */}
-      <section id="characters" className="py-24 px-6 relative overflow-hidden">
+      <section id="characters" ref={charactersRef} className="py-24 px-6 relative overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold mb-4 italic">Meet the Friends</h2>
@@ -419,7 +496,7 @@ export default function App() {
       </section>
 
       {/* Gallery / Interactive Sticker Board */}
-      <section id="gallery" className="py-24 px-6 bg-brand-green/10">
+      <section id="gallery" ref={galleryRef} className="py-24 px-6 bg-brand-green/10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
@@ -441,6 +518,7 @@ export default function App() {
               <motion.div
                 key={i}
                 whileHover={{ rotate: [-2, 2, -2], scale: 1.05 }}
+                onClick={() => setSelectedSticker(i)}
                 className="aspect-square bg-white rounded-2xl soft-shadow p-4 flex flex-col items-center justify-center gap-3 border-b-4 border-black/5 cursor-pointer"
               >
                 <div className={`w-full aspect-square rounded-xl flex items-center justify-center text-4xl bg-opacity-20 ${
@@ -465,11 +543,11 @@ export default function App() {
           {/* Background Image with Gradient Overlay */}
           <div className="absolute inset-0 z-0">
             <div 
-              className="absolute inset-0 bg-cover bg-center opacity-60"
-              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1550586678-f7225f03c44b?auto=format&fit=crop&q=80&w=1600')` }}
+              className="absolute inset-0 bg-cover bg-center opacity-70"
+              style={{ backgroundImage: `url('https://raw.githubusercontent.com/kajun77/animal/e69cdfb9dfee364a6e26a951cd2145762932e3c1/%EC%88%B2%EC%86%8D%EC%B9%9C%EA%B5%AC%EB%93%A4_%EC%B9%B4%ED%88%B0.png')` }}
             />
-            {/* The requested gradient: transparent at top, deep at bottom */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-brown/60 to-brand-brown" />
+            {/* The requested gradient: transparent at top, deep at bottom for natural blend */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-brown/40 to-brand-brown/95" />
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 relative z-10">
